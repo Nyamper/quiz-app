@@ -1,9 +1,9 @@
 export type Quiz = {
-  _id: string;
+  _id?: string;
   category: string;
   quizName: string;
   description: string;
-  cardImageUrl: string;
+  cardImageUrl?: string;
   questions: Array<QuizQuestion>;
 };
 

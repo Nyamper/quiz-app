@@ -9,7 +9,7 @@ export const StyledNavLink = styled(NavLink)`
   text-decoration: none;
 
   &.active {
-    color: yellow;
+    color: red;
   }
 `;
 

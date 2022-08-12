@@ -8,3 +8,7 @@ export const getQuizzes = async () => {
 export const getQuiz = async (id: string) => {
   return await client.get<never, Quiz>(`/quiz/${id}`);
 };
+
+export const createQuiz = async (quiz: Quiz) => {
+  return await client.post<never, Quiz>('/quiz', quiz);
+};

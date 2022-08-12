@@ -35,6 +35,12 @@ const Header = () => {
               <StyledNavLink to={'/leaderboard'}>Leader board</StyledNavLink>
             </Typography>
           </MenuItem>
+
+          <MenuItem>
+            <Typography textAlign="center" variant="h6">
+              <StyledNavLink to={'/builder'}>Quiz Builder</StyledNavLink>
+            </Typography>
+          </MenuItem>
         </Toolbar>
       </StyledAppBar>
     </>
