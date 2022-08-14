@@ -1,7 +1,12 @@
-import { useForm, Controller } from 'react-hook-form';
-import { Box, Divider, Radio, RadioGroup, TextField } from '@mui/material';
+import { Box, Divider } from '@mui/material';
+import { FormInputText } from '../FormInputText/FormInputText';
+import { FormInputRadio } from '../FormInputRadio/FormInputRadio';
 
-const QuizQuestions = () => {
+import { Quiz } from '../../../../types/types';
+
+import { Control } from 'react-hook-form';
+
+const QuizQuestions = ({ control }: { control: Control<Quiz> }) => {
   return (
     <>
       <Box
@@ -13,48 +18,67 @@ const QuizQuestions = () => {
         }}
       >
         <Box>
-          <TextField label="Question" size="small" fullWidth />
+          <FormInputText name="question" label="Question" control={control} />
         </Box>
         <Divider sx={{ my: 2 }} />
-        <Box>
-          <RadioGroup defaultValue="0">
-            <Box display="flex" justifyContent="center" alignItems="center">
-              <Radio value="0" />
-              <TextField
-                label="answer a"
-                size="small"
-                fullWidth
-                sx={{ my: 1 }}
+        <Box display="flex" justifyContent="center" alignItems="center">
+          <Box>
+            <FormInputRadio
+              name={'correctAnswerIndex'}
+              label={'Radio Input'}
+              control={control}
+            />
+          </Box>
+          <Box width="100%">
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              sx={{ my: 2 }}
+            >
+              <FormInputText
+                name="answerValue"
+                label="Answer a"
+                control={control}
               />
             </Box>
-            <Box display="flex" justifyContent="center" alignItems="center">
-              <Radio value="1" />
-              <TextField
-                label="answer b"
-                size="small"
-                fullWidth
-                sx={{ my: 1 }}
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              sx={{ my: 2 }}
+            >
+              <FormInputText
+                name="answerValue2"
+                label="Answer b"
+                control={control}
               />
             </Box>
-            <Box display="flex" justifyContent="center" alignItems="center">
-              <Radio value="2" />
-              <TextField
-                label="answer c"
-                size="small"
-                fullWidth
-                sx={{ my: 1 }}
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              sx={{ my: 2 }}
+            >
+              <FormInputText
+                name="answerValue3"
+                label="Answer c"
+                control={control}
               />
             </Box>
-            <Box display="flex" justifyContent="center" alignItems="center">
-              <Radio value="3" />
-              <TextField
-                label="answer d"
-                size="small"
-                fullWidth
-                sx={{ my: 1 }}
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              sx={{ my: 2 }}
+            >
+              <FormInputText
+                name="answerValue4"
+                label="Answer d"
+                control={control}
               />
             </Box>
-          </RadioGroup>
+          </Box>
         </Box>
       </Box>
     </>

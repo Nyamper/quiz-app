@@ -8,10 +8,10 @@ export type Quiz = {
 };
 
 export type QuizQuestion = {
-  _id: string;
+  _id?: string;
   question: string;
   answers: Array<string>;
-  correctAnswerIndex: number;
+  correctAnswerIndex?: number;
 };
 
 export type QuizPartial = {

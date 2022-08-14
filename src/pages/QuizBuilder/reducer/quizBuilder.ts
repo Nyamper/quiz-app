@@ -7,7 +7,13 @@ const initialState: Quiz = {
   quizName: '',
   description: '',
   cardImageUrl: '',
-  questions: [],
+  questions: [
+    {
+      question: '',
+      answers: ['', '', '', ''],
+      correctAnswerIndex: 0,
+    },
+  ],
 };
 
 const QUIZ_BUILDER_SLICE_NAME = 'QUIZ_BUILDER_SLICE';
@@ -24,5 +30,9 @@ const quizBuilderSlice = createSlice({
       state.questions.push(action.payload);
     },
   },
-  extraReducers: (builder) => {},
+  // extraReducers: (builder) => {},
 });
+
+export const { addQuestion: addQuestionAction } = quizBuilderSlice.actions;
+
+export default quizBuilderSlice.reducer;

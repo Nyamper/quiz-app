@@ -14,7 +14,8 @@ const Header = () => {
         position="sticky"
         sx={{ border: 1, borderColor: 'red' }}
         style={{
-          backgroundColor: 'transparent',
+          backgroundColor: 'white',
+          // backgroundColor: 'transparent',
           boxShadow: 'none',
         }}
       >
