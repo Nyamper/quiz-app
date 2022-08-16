@@ -1,14 +1,43 @@
 import client from './client';
-import { QuizPartial, Quiz } from '../types/types';
+import { QuizPartial, Quiz, LeaderBoard } from '../types/types';
 
 export const getQuizzes = async () => {
-  return await client.get<never, QuizPartial[]>('/quiz');
+  try {
+    return await client.get<never, QuizPartial[]>('/quiz');
+  } catch (error) {
+    return Promise.reject(error);
+  }
 };
 
 export const getQuiz = async (id: string) => {
-  return await client.get<never, Quiz>(`/quiz/${id}`);
+  try {
+    const response = await client.get<never, Quiz>(`/quiz/${id}`);
+    return response;
+  } catch (error) {
+    return Promise.reject(error);
+  }
 };
 
 export const createQuiz = async (quiz: Quiz) => {
-  return await client.post<never, Quiz>('/quiz', quiz);
+  try {
+    return await client.post<never, Quiz>('/quiz', quiz);
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
+export const postLeaderBoard = async (leaderBoard: LeaderBoard) => {
+  try {
+    return await client.post<never, LeaderBoard>('/leaderboard', leaderBoard);
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
+export const getLeaderBoard = async () => {
+  try {
+    return await client.get<never, LeaderBoard[]>('/leaderboard');
+  } catch (error) {
+    return Promise.reject(error);
+  }
 };

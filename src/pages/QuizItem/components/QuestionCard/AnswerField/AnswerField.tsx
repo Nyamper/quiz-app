@@ -14,8 +14,8 @@ const theme = createTheme({
 });
 
 const AnswerField = (props: AnswerProps) => {
-  const { checkAnswer } = props;
-  const { answers, correctAnswerIndex } = props.question;
+  const { getAnswer } = props;
+  const { answers } = props.question;
 
   return (
     <>
@@ -27,7 +27,7 @@ const AnswerField = (props: AnswerProps) => {
                 color="blue"
                 elevation={3}
                 key={index}
-                onClick={() => checkAnswer(correctAnswerIndex, index)}
+                onClick={() => getAnswer(index)}
               >
                 {answer}
               </StyledPaper>

@@ -21,7 +21,7 @@ const Quiz = () => {
   return (
     <>
       <Container maxWidth={'xl'}>
-        {error && <div>something went wrong</div>}
+        {error && !quizzes && <h1>something went wrong</h1>}
         {loading && !error && <Spinner />}
         <StyledCardContainer
           container

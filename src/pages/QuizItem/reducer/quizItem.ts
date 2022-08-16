@@ -7,6 +7,9 @@ import { QuizState } from '../../../types/types';
 const initialState: QuizState = {
   loading: true,
   error: null,
+  start: false,
+  questionCurrentIndex: 0,
+  selectedAnswers: [],
   data: {
     _id: '',
     category: '',
@@ -22,7 +25,25 @@ const QUIZ_ITEM_SLICE_NAME = 'QUIZ_ITEM_SLICE';
 const quizItemSlice = createSlice({
   name: QUIZ_ITEM_SLICE_NAME,
   initialState,
-  reducers: {},
+  reducers: {
+    quizStart: (state) => {
+      state.start = true;
+    },
+
+    quizSelectedAnswers: (state, action) => {
+      state.selectedAnswers.push(action.payload);
+    },
+
+    quizQuestionCurrentIndex: (state) => {
+      state.questionCurrentIndex = state.questionCurrentIndex + 1;
+    },
+
+    quizStateReset: (state) => {
+      state.questionCurrentIndex = 0;
+      state.selectedAnswers = [];
+      state.start = false;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(quizItemFetch.pending, (state) => {
       state.loading = true;
@@ -40,5 +61,12 @@ const quizItemSlice = createSlice({
     });
   },
 });
+
+export const {
+  quizSelectedAnswers: quizSelectedAnswersAction,
+  quizQuestionCurrentIndex: quizQuestionCurrentIndexAction,
+  quizStart: quizStartAction,
+  quizStateReset: quizStateResetAction,
+} = quizItemSlice.actions;
 
 export default quizItemSlice.reducer;

@@ -9,7 +9,6 @@ export const quizItemFetch = createAsyncThunk(
   async (_id: string, { rejectWithValue }) => {
     try {
       return await getQuiz(_id);
-      //   return async (id: string) => await getQuiz(id);
     } catch (error: unknown) {
       if (error instanceof Error) {
         return rejectWithValue(error);

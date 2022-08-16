@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import QuizList from './pages/QuizList';
 import QuizItem from './pages/QuizItem';
 import QuizBuilder from './pages/QuizBuilder';
+import Builder from './pages/Builder';
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
             <Route index element={<QuizList />} />
             <Route path=":quizid" element={<QuizItem />} />
           </Route>
+          <Route path="builder2" element={<Builder />} />
           <Route path="builder" element={<QuizBuilder />} />
           <Route path="leaderboard" element={<LeaderBoard />} />
           <Route path="*" element={<div>page not found 404</div>} />

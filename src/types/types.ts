@@ -7,6 +7,28 @@ export type Quiz = {
   questions: Array<QuizQuestion>;
 };
 
+export type LeaderBoard = {
+  _id?: string;
+  username: string;
+  category: string;
+  quizName: string;
+  time: number;
+  createdAt?: Date;
+  updatedAt?: Date;
+};
+
+export type LeaderBoardState = {
+  loading: boolean;
+  error: boolean | null;
+  data: LeaderBoard[];
+};
+
+export type LeaderBoardPartial = {
+  quizName: string;
+  time: number;
+  questionCount: number;
+};
+
 export type QuizQuestion = {
   _id?: string;
   question: string;
@@ -31,15 +53,18 @@ export type QuizzesState = {
 export type QuizState = {
   loading: boolean;
   error: boolean | null;
+  start: boolean;
+  questionCurrentIndex: number;
+  selectedAnswers: Array<number>;
   data: Quiz;
 };
 
 export type CardProps = {
   question: QuizQuestion;
-  checkAnswer: Function;
+  getAnswer: Function;
 };
 
 export type AnswerProps = {
   question: QuizQuestion;
-  checkAnswer: Function;
+  getAnswer: Function;
 };

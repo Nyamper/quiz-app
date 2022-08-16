@@ -1,4 +1,3 @@
-import { Container, Typography } from '@mui/material';
 import Auth from '../../components/Auth';
 
 const Home = () => {

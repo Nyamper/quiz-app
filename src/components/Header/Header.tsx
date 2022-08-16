@@ -12,18 +12,30 @@ const Header = () => {
     <>
       <StyledAppBar
         position="sticky"
-        sx={{ border: 1, borderColor: 'red' }}
+        // sx={{ border: 1, borderColor: 'red' }}
         style={{
           backgroundColor: 'white',
           // backgroundColor: 'transparent',
           boxShadow: 'none',
         }}
       >
-        <Toolbar>
-          <StyledYardIcon />
-          <StyledLogo variant="h5">
-            <StyledLink to={'/'}>QUIZ</StyledLink>
-          </StyledLogo>
+        <Toolbar
+          sx={{
+            justifyContent: 'center',
+            // justifyContent: 'space-between',
+          }}
+        >
+          {/* <MenuItem>
+            <Typography textAlign="center" variant="h6">
+              <StyledNavLink to={'/builder2'}>BUILDER2</StyledNavLink>
+            </Typography>
+          </MenuItem> */}
+
+          <MenuItem>
+            <Typography textAlign="center" variant="h6">
+              <StyledNavLink to={'/'}>HOME</StyledNavLink>
+            </Typography>
+          </MenuItem>
 
           <MenuItem>
             <Typography textAlign="center" variant="h6">
@@ -33,13 +45,13 @@ const Header = () => {
 
           <MenuItem>
             <Typography textAlign="center" variant="h6">
-              <StyledNavLink to={'/leaderboard'}>Leader board</StyledNavLink>
+              <StyledNavLink to={'/builder'}>Quiz Builder</StyledNavLink>
             </Typography>
           </MenuItem>
 
           <MenuItem>
             <Typography textAlign="center" variant="h6">
-              <StyledNavLink to={'/builder'}>Quiz Builder</StyledNavLink>
+              <StyledNavLink to={'/leaderboard'}>Leader board</StyledNavLink>
             </Typography>
           </MenuItem>
         </Toolbar>
