@@ -2,21 +2,27 @@ import { Box, Button, Typography } from '@mui/material';
 import Modal from '../../../../components/Modal';
 
 type Props = {
-  onCancel: () => void;
-  handleRedirectToQuizzes: () => void;
-  handleRedirectToLeaderBoard: () => void;
+  handleRedirectToQuizzes?: () => void;
+  handleRedirectToLeaderBoard?: () => void;
   handlePlayAgain: () => void;
+  handleModalChangeName: (name: string) => void;
+  resetStopWatch: () => void;
+  // quizName: string;
+  // timeSpent: number;
+  // correctAnswers: number;
+  // totalQuestions: number;
 };
 
 const FinalScreenModal = ({
-  onCancel,
   handleRedirectToQuizzes,
   handleRedirectToLeaderBoard,
   handlePlayAgain,
+  handleModalChangeName,
+  resetStopWatch,
 }: Props) => {
   return (
     <>
-      <Modal onCancel={onCancel}>
+      <Modal>
         <Box
           sx={{
             p: 5,
@@ -53,21 +59,34 @@ const FinalScreenModal = ({
               }}
             >
               <Button
-                sx={{ my: 2, height: '50px' }}
+                sx={{ my: 1, height: '50px' }}
                 variant="outlined"
-                onClick={handlePlayAgain}
+                onClick={() => {
+                  resetStopWatch();
+                  handlePlayAgain();
+                }}
               >
                 Play Again
               </Button>
+
               <Button
-                sx={{ my: 2, height: '50px' }}
+                sx={{ my: 1, height: '50px' }}
                 variant="outlined"
                 onClick={handleRedirectToQuizzes}
               >
                 See all quizzes
               </Button>
+
               <Button
-                sx={{ my: 2, height: '50px' }}
+                sx={{ my: 1, height: '50px' }}
+                variant="outlined"
+                onClick={() => handleModalChangeName('Statistic')}
+              >
+                Details
+              </Button>
+
+              <Button
+                sx={{ my: 1, height: '50px' }}
                 variant="outlined"
                 onClick={handleRedirectToLeaderBoard}
               >

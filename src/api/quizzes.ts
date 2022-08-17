@@ -1,5 +1,5 @@
 import client from './client';
-import { QuizPartial, Quiz, LeaderBoard } from '../types/types';
+import { QuizPartial, Quiz, LeaderBoard, QuizQuestion } from '../types/types';
 
 export const getQuizzes = async () => {
   try {
@@ -12,6 +12,17 @@ export const getQuizzes = async () => {
 export const getQuiz = async (id: string) => {
   try {
     const response = await client.get<never, Quiz>(`/quiz/${id}`);
+    return response;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+};
+
+export const getQuizCorrectAnswers = async (id: string) => {
+  try {
+    const response = await client.get<never, QuizQuestion[]>(
+      `/quiz/answers/${id}`
+    );
     return response;
   } catch (error) {
     return Promise.reject(error);

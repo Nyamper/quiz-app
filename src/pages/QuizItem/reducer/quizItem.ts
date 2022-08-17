@@ -1,8 +1,22 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { quizItemFetch } from '../thunk/quizItem';
+import { quizItemFetch, quizItemCorrectAnswersFetch } from '../thunk/quizItem';
 
-import { QuizState } from '../../../types/types';
+import { Quiz, QuizQuestion } from '../../../types/types';
+
+type QuizState = {
+  loading: boolean;
+  error: boolean | null;
+  start: boolean;
+  questionCurrentIndex: number;
+  selectedAnswers: Array<number>;
+  data: Quiz;
+  correctAnswersState: {
+    loading: boolean;
+    error: boolean | null;
+    data: QuizQuestion[];
+  };
+};
 
 const initialState: QuizState = {
   loading: true,
@@ -17,6 +31,11 @@ const initialState: QuizState = {
     description: '',
     cardImageUrl: 'string',
     questions: [],
+  },
+  correctAnswersState: {
+    loading: true,
+    error: null,
+    data: [],
   },
 };
 
@@ -49,15 +68,26 @@ const quizItemSlice = createSlice({
       state.loading = true;
       state.error = null;
     });
-
     builder.addCase(quizItemFetch.fulfilled, (state, action) => {
       state.loading = false;
       state.data = action.payload;
     });
-
     builder.addCase(quizItemFetch.rejected, (state) => {
       state.loading = false;
       state.error = true;
+    });
+
+    builder.addCase(quizItemCorrectAnswersFetch.pending, (state) => {
+      state.correctAnswersState.loading = true;
+      state.correctAnswersState.error = null;
+    });
+    builder.addCase(quizItemCorrectAnswersFetch.fulfilled, (state, action) => {
+      state.correctAnswersState.loading = false;
+      state.correctAnswersState.data = action.payload;
+    });
+    builder.addCase(quizItemCorrectAnswersFetch.rejected, (state) => {
+      state.correctAnswersState.loading = false;
+      state.correctAnswersState.error = true;
     });
   },
 });

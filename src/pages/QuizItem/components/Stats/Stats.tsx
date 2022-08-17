@@ -1,13 +1,19 @@
-import { Box, Container, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import Stopwatch from './Stopwatch';
 
 type StatsProps = {
   questionCurrentIndex: number;
   totalQuestions: number;
-  description: string;
+  seconds: number;
+  minutes: number;
 };
 
-const Stats = (props: StatsProps) => {
+const Stats = ({
+  questionCurrentIndex,
+  totalQuestions,
+  seconds,
+  minutes,
+}: StatsProps) => {
   return (
     <>
       <Box
@@ -20,7 +26,7 @@ const Stats = (props: StatsProps) => {
         </Typography>
 
         <Typography variant={'h5'} align={'center'} sx={{ m: 1 }}>
-          {props.questionCurrentIndex + 1} of {props.totalQuestions}
+          {questionCurrentIndex + 1} of {totalQuestions}
         </Typography>
 
         <Box
@@ -29,13 +35,8 @@ const Stats = (props: StatsProps) => {
           height={50}
           sx={{ display: 'flex', mt: 8 }}
         >
-          <Stopwatch />
+          <Stopwatch seconds={seconds} minutes={minutes} />
         </Box>
-        {/* <Box sx={{ mt: 20 }}>
-          <Typography variant={'body1'} align={'center'} sx={{ m: 1 }}>
-            {props.description}
-          </Typography>
-        </Box> */}
       </Box>
     </>
   );

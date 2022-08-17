@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from '../../hooks/hooks';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useStopwatch } from 'react-timer-hook';
 
 import { Box, Container } from '@mui/material';
 
@@ -10,7 +11,10 @@ import Spinner from '../../components/Spinner';
 import QuizDescription from './components/QuizDescription';
 
 import { quizItemFetch } from './thunk/quizItem';
-import { modalOpenToggleAction } from '../../store/modal/reducer/modal';
+import {
+  modalOpenToggleAction,
+  modalSetNameAction,
+} from '../../store/modal/reducer/modal';
 
 import {
   quizSelectedAnswersAction,
@@ -20,12 +24,14 @@ import {
 } from './reducer/quizItem';
 
 import FinalScreenModal from './components/FinalScreenModal';
+import StatisticScreenModal from './components/StatisticScreenModal';
 
 const QuizItem = () => {
   const navigate = useNavigate();
-
   const params = useParams();
+  const location = useLocation();
   const dispatch = useAppDispatch();
+
   const {
     loading,
     error,
@@ -34,7 +40,16 @@ const QuizItem = () => {
     questionCurrentIndex,
     data: quizItem,
   } = useAppSelector((state) => state.quizItem);
-  const { open } = useAppSelector((state) => state.modal);
+
+  const {
+    seconds,
+    minutes,
+    start: startStopWatch,
+    pause: pauseStopWatch,
+    reset: resetStopWatch,
+  } = useStopwatch({ autoStart: false });
+
+  const { open, name } = useAppSelector((state) => state.modal);
 
   const { category, quizName, description, questions } = quizItem;
 
@@ -42,12 +57,16 @@ const QuizItem = () => {
     dispatch(quizItemFetch(params.quizid || ''));
   }, [dispatch]);
 
+  useEffect(() => {
+    dispatch(quizStateResetAction());
+  }, [location]);
+
   const handleModalOpen = () => {
-    dispatch(modalOpenToggleAction());
+    dispatch(modalOpenToggleAction({ name: 'FinalScreen' }));
   };
 
-  const quizStart = () => {
-    dispatch(quizStartAction());
+  const handleModalChangeName = (name: string) => {
+    dispatch(modalSetNameAction({ name: name }));
   };
 
   const handleRedirectToLeaderBoard = () => {
@@ -68,6 +87,11 @@ const QuizItem = () => {
     navigate(`/quizzes/${params.quizid}`);
   };
 
+  const quizStart = () => {
+    dispatch(quizStartAction());
+    startStopWatch();
+  };
+
   const quizCancel = () => {
     navigate('/quizzes');
     dispatch(quizStateResetAction());
@@ -75,6 +99,7 @@ const QuizItem = () => {
 
   const getAnswer = (selectedAnswer: number) => {
     if (questionCurrentIndex === questions.length - 1) {
+      pauseStopWatch();
       handleModalOpen();
     }
     if (questionCurrentIndex < questions.length - 1) {
@@ -109,9 +134,10 @@ const QuizItem = () => {
                 }}
               >
                 <Stats
+                  seconds={seconds}
+                  minutes={minutes}
                   questionCurrentIndex={questionCurrentIndex}
                   totalQuestions={questions.length}
-                  description={description}
                 />
                 <QuestionCard
                   question={questions[questionCurrentIndex]}
@@ -122,13 +148,18 @@ const QuizItem = () => {
           </Box>
         </Container>
       )}
-      {open && (
+      {open && name === 'FinalScreen' && (
         <FinalScreenModal
           handleRedirectToQuizzes={handleRedirectToQuizzes}
           handleRedirectToLeaderBoard={handleRedirectToLeaderBoard}
+          handleModalChangeName={handleModalChangeName}
           handlePlayAgain={handlePlayAgain}
-          onCancel={handleModalOpen}
+          resetStopWatch={resetStopWatch}
         />
+      )}
+
+      {open && name === 'Statistic' && (
+        <StatisticScreenModal handleModalChangeName={handleModalChangeName} />
       )}
     </>
   );

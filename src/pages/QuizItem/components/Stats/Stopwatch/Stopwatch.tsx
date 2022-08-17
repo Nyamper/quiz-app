@@ -1,11 +1,11 @@
-import { useStopwatch } from 'react-timer-hook';
-
 import { Box, Typography } from '@mui/material';
 
-const Stopwatch = () => {
-  const { seconds, minutes, hours, days, isRunning, start, pause, reset } =
-    useStopwatch({ autoStart: true });
+type Props = {
+  seconds: number;
+  minutes: number;
+};
 
+const Stopwatch = ({ seconds, minutes }: Props) => {
   return (
     <>
       <Box m="auto" sx={{ justifyContent: 'center' }}>
@@ -19,8 +19,8 @@ const Stopwatch = () => {
             borderColor: 'secondary.main',
           }}
         >
-          <Typography variant="h4" align="center" sx={{ mt: 2.5 }}>
-            {seconds}
+          <Typography variant="h4" align="center" sx={{ mt: 3 }}>
+            {minutes}:{seconds}
           </Typography>
         </Box>
       </Box>

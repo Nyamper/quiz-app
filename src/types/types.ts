@@ -50,15 +50,6 @@ export type QuizzesState = {
   data: QuizPartial[];
 };
 
-export type QuizState = {
-  loading: boolean;
-  error: boolean | null;
-  start: boolean;
-  questionCurrentIndex: number;
-  selectedAnswers: Array<number>;
-  data: Quiz;
-};
-
 export type CardProps = {
   question: QuizQuestion;
   getAnswer: Function;
