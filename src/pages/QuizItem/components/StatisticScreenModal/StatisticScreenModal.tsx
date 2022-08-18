@@ -3,9 +3,13 @@ import Modal from '../../../../components/Modal';
 
 type Props = {
   handleModalChangeName: (name: string) => void;
+  createStatistic: () => void;
 };
 
-const StatisticScreenModal = ({ handleModalChangeName }: Props) => {
+const StatisticScreenModal = ({
+  handleModalChangeName,
+  createStatistic,
+}: Props) => {
   return (
     <>
       <Modal>
@@ -29,6 +33,9 @@ const StatisticScreenModal = ({ handleModalChangeName }: Props) => {
                 onClick={() => handleModalChangeName('FinalScreen')}
               >
                 Go Back
+              </Button>
+              <Button onClick={() => createStatistic()}>
+                Create Statistic
               </Button>
             </Box>
           </Box>

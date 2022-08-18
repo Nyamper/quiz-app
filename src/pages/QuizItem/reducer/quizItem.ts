@@ -4,6 +4,12 @@ import { quizItemFetch, quizItemCorrectAnswersFetch } from '../thunk/quizItem';
 
 import { Quiz, QuizQuestion } from '../../../types/types';
 
+type VerifiedAnswers = {
+  question: string;
+  chosenAnswer: string;
+  correctAnswer: string;
+};
+
 type QuizState = {
   loading: boolean;
   error: boolean | null;
@@ -11,10 +17,16 @@ type QuizState = {
   questionCurrentIndex: number;
   selectedAnswers: Array<number>;
   data: Quiz;
-  correctAnswersState: {
+  questionsState: {
     loading: boolean;
     error: boolean | null;
-    data: QuizQuestion[];
+    questions: QuizQuestion[];
+  };
+  statisticState: {
+    totalQuestions: number;
+    correctAnswersCount: number;
+    spentTime: number;
+    verifiedAnswers: VerifiedAnswers[];
   };
 };
 
@@ -32,10 +44,16 @@ const initialState: QuizState = {
     cardImageUrl: 'string',
     questions: [],
   },
-  correctAnswersState: {
+  questionsState: {
     loading: true,
     error: null,
-    data: [],
+    questions: [],
+  },
+  statisticState: {
+    totalQuestions: 0,
+    correctAnswersCount: 0,
+    spentTime: 0,
+    verifiedAnswers: [],
   },
 };
 
@@ -62,6 +80,10 @@ const quizItemSlice = createSlice({
       state.selectedAnswers = [];
       state.start = false;
     },
+
+    createQuizStatistic: (state, action) => {
+      state.statisticState = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(quizItemFetch.pending, (state) => {
@@ -78,25 +100,26 @@ const quizItemSlice = createSlice({
     });
 
     builder.addCase(quizItemCorrectAnswersFetch.pending, (state) => {
-      state.correctAnswersState.loading = true;
-      state.correctAnswersState.error = null;
+      state.questionsState.loading = true;
+      state.questionsState.error = null;
     });
     builder.addCase(quizItemCorrectAnswersFetch.fulfilled, (state, action) => {
-      state.correctAnswersState.loading = false;
-      state.correctAnswersState.data = action.payload;
+      state.questionsState.loading = false;
+      state.questionsState.questions = action.payload;
     });
     builder.addCase(quizItemCorrectAnswersFetch.rejected, (state) => {
-      state.correctAnswersState.loading = false;
-      state.correctAnswersState.error = true;
+      state.questionsState.loading = false;
+      state.questionsState.error = true;
     });
   },
 });
 
 export const {
   quizSelectedAnswers: quizSelectedAnswersAction,
-  quizQuestionCurrentIndex: quizQuestionCurrentIndexAction,
   quizStart: quizStartAction,
   quizStateReset: quizStateResetAction,
+  createQuizStatistic: createQuizStatisticAction,
+  quizQuestionCurrentIndex: quizQuestionCurrentIndexAction,
 } = quizItemSlice.actions;
 
 export default quizItemSlice.reducer;

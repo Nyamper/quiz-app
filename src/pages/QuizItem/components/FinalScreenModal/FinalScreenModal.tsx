@@ -90,7 +90,7 @@ const FinalScreenModal = ({
                 variant="outlined"
                 onClick={handleRedirectToLeaderBoard}
               >
-                View Leaderboard
+                Leaderboard
               </Button>
             </Box>
           </Box>

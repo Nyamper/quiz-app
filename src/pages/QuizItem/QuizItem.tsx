@@ -10,7 +10,7 @@ import QuestionCard from './components/QuestionCard';
 import Spinner from '../../components/Spinner';
 import QuizDescription from './components/QuizDescription';
 
-import { quizItemFetch } from './thunk/quizItem';
+import { quizItemFetch, quizItemCorrectAnswersFetch } from './thunk/quizItem';
 import {
   modalOpenToggleAction,
   modalSetNameAction,
@@ -18,9 +18,10 @@ import {
 
 import {
   quizSelectedAnswersAction,
-  quizQuestionCurrentIndexAction,
   quizStartAction,
   quizStateResetAction,
+  quizQuestionCurrentIndexAction,
+  createQuizStatisticAction,
 } from './reducer/quizItem';
 
 import FinalScreenModal from './components/FinalScreenModal';
@@ -39,6 +40,7 @@ const QuizItem = () => {
     selectedAnswers,
     questionCurrentIndex,
     data: quizItem,
+    questionsState,
   } = useAppSelector((state) => state.quizItem);
 
   const {
@@ -87,33 +89,78 @@ const QuizItem = () => {
     navigate(`/quizzes/${params.quizid}`);
   };
 
-  const quizStart = () => {
+  const handleQuizStart = () => {
     dispatch(quizStartAction());
     startStopWatch();
   };
 
-  const quizCancel = () => {
+  const handleQuizCancel = () => {
     navigate('/quizzes');
     dispatch(quizStateResetAction());
   };
 
+  const handleQuizEnd = () => {
+    pauseStopWatch();
+    handleModalOpen();
+    dispatch(quizItemCorrectAnswersFetch(params.quizid || ''));
+  };
+
   const getAnswer = (selectedAnswer: number) => {
+    dispatch(quizSelectedAnswersAction(selectedAnswer));
     if (questionCurrentIndex === questions.length - 1) {
-      pauseStopWatch();
-      handleModalOpen();
+      handleQuizEnd();
     }
     if (questionCurrentIndex < questions.length - 1) {
       dispatch(quizQuestionCurrentIndexAction());
-      dispatch(quizSelectedAnswersAction(selectedAnswer));
     }
+  };
+
+  const createStatistic = () => {
+    const totalQuestions = questions.length;
+    let correctAnswersCount = 0;
+    const spentTime: number = minutes ? minutes * 60 + seconds : seconds;
+    const verifiedAnswers = questionsState.questions.map(
+      ({ question, answers, correctAnswerIndex }) => {
+        return {
+          question: question,
+          answers: answers.filter((answer, index) => {
+            if (index === selectedAnswers[index]) {
+              correctAnswersCount++;
+              return answer;
+            } else {
+              if (index === correctAnswerIndex) {
+                return answer;
+              }
+            }
+            // return index === correctAnswerIndex || index === selectedAnswers[index] ? answer : null;
+          }),
+        };
+      }
+    );
+    console.log(verifiedAnswers);
+    console.log(selectedAnswers);
+    // const verifiedAnswers = questionsState.questions.map(
+    //   ({ question, answers, correctAnswerIndex }) => {
+    //     return {
+    //       question: question,
+    //       answers: answers.filter((answer, index) => {
+    //         return index === correctAnswerIndex ||
+    //           index === selectedAnswers[index]
+    //           ? answer
+    //           : null;
+    //       }),
+    //     };
+    //   }
+    // );
   };
 
   return (
     <>
+      <button onClick={() => createStatistic()}>test</button>
       {!start && !error && !loading && (
         <QuizDescription
-          quizStart={quizStart}
-          quizCancel={quizCancel}
+          handleQuizStart={handleQuizStart}
+          handleQuizCancel={handleQuizCancel}
           quizName={quizName}
           category={category}
           description={description}
@@ -159,7 +206,10 @@ const QuizItem = () => {
       )}
 
       {open && name === 'Statistic' && (
-        <StatisticScreenModal handleModalChangeName={handleModalChangeName} />
+        <StatisticScreenModal
+          handleModalChangeName={handleModalChangeName}
+          createStatistic={createStatistic}
+        />
       )}
     </>
   );

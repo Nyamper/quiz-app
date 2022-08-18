@@ -1,16 +1,16 @@
 import { Box, Button, Container, Divider, Typography } from '@mui/material';
 
 type Props = {
-  quizStart: () => void;
-  quizCancel: () => void;
+  handleQuizStart: () => void;
+  handleQuizCancel: () => void;
   quizName: string;
   category: string;
   description: string;
 };
 
 const QuizDescription = ({
-  quizStart,
-  quizCancel,
+  handleQuizStart,
+  handleQuizCancel,
   quizName,
   category,
   description,
@@ -51,11 +51,19 @@ const QuizDescription = ({
             justifyContent="center"
             alignItems="center"
           >
-            <Button variant="outlined" fullWidth onClick={() => quizCancel()}>
+            <Button
+              variant="outlined"
+              fullWidth
+              onClick={() => handleQuizCancel()}
+            >
               GO BACK
             </Button>
             <Box sx={{ mx: 5 }}></Box>
-            <Button variant="outlined" fullWidth onClick={() => quizStart()}>
+            <Button
+              variant="outlined"
+              fullWidth
+              onClick={() => handleQuizStart()}
+            >
               START
             </Button>
           </Box>
