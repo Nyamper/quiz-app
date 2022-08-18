@@ -27,7 +27,7 @@ const AnswerField = (props: AnswerProps) => {
                 color="blue"
                 elevation={3}
                 key={index}
-                onClick={() => getAnswer(index)}
+                onClick={() => getAnswer(answer)}
               >
                 {answer}
               </StyledPaper>

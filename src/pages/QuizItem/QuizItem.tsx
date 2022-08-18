@@ -41,7 +41,12 @@ const QuizItem = () => {
     questionCurrentIndex,
     data: quizItem,
     questionsState,
+    statisticState,
   } = useAppSelector((state) => state.quizItem);
+  const { open, name } = useAppSelector((state) => state.modal);
+
+  const { category, quizName, description, questions } = quizItem;
+  const { verifiedAnswers } = statisticState;
 
   const {
     seconds,
@@ -50,10 +55,6 @@ const QuizItem = () => {
     pause: pauseStopWatch,
     reset: resetStopWatch,
   } = useStopwatch({ autoStart: false });
-
-  const { open, name } = useAppSelector((state) => state.modal);
-
-  const { category, quizName, description, questions } = quizItem;
 
   useEffect(() => {
     dispatch(quizItemFetch(params.quizid || ''));
@@ -103,13 +104,17 @@ const QuizItem = () => {
     pauseStopWatch();
     handleModalOpen();
     dispatch(quizItemCorrectAnswersFetch(params.quizid || ''));
+    console.log(selectedAnswers);
   };
 
-  const getAnswer = (selectedAnswer: number) => {
+  const getAnswer = (selectedAnswer: string) => {
     dispatch(quizSelectedAnswersAction(selectedAnswer));
+
     if (questionCurrentIndex === questions.length - 1) {
+      createStatistic();
       handleQuizEnd();
     }
+
     if (questionCurrentIndex < questions.length - 1) {
       dispatch(quizQuestionCurrentIndexAction());
     }
@@ -119,44 +124,30 @@ const QuizItem = () => {
     const totalQuestions = questions.length;
     let correctAnswersCount = 0;
     const spentTime: number = minutes ? minutes * 60 + seconds : seconds;
-    const verifiedAnswers = questionsState.questions.map(
-      ({ question, answers, correctAnswerIndex }) => {
-        return {
-          question: question,
-          answers: answers.filter((answer, index) => {
-            if (index === selectedAnswers[index]) {
-              correctAnswersCount++;
-              return answer;
-            } else {
-              if (index === correctAnswerIndex) {
-                return answer;
-              }
-            }
-            // return index === correctAnswerIndex || index === selectedAnswers[index] ? answer : null;
-          }),
-        };
+    const verifiedAnswers = questionsState.questions.map((question, answer) => {
+      if (question.correctAnswer === selectedAnswers[answer]) {
+        correctAnswersCount++;
       }
+      return {
+        question: question.question,
+        correctAnswer: question.correctAnswer,
+        selectedAnswer: selectedAnswers[answer],
+      };
+    });
+
+    return dispatch(
+      createQuizStatisticAction({
+        totalQuestions,
+        correctAnswersCount,
+        spentTime,
+        verifiedAnswers,
+      })
     );
-    console.log(verifiedAnswers);
-    console.log(selectedAnswers);
-    // const verifiedAnswers = questionsState.questions.map(
-    //   ({ question, answers, correctAnswerIndex }) => {
-    //     return {
-    //       question: question,
-    //       answers: answers.filter((answer, index) => {
-    //         return index === correctAnswerIndex ||
-    //           index === selectedAnswers[index]
-    //           ? answer
-    //           : null;
-    //       }),
-    //     };
-    //   }
-    // );
   };
 
   return (
     <>
-      <button onClick={() => createStatistic()}>test</button>
+      <button onClick={() => console.log(selectedAnswers)}>logasdsdgs</button>
       {!start && !error && !loading && (
         <QuizDescription
           handleQuizStart={handleQuizStart}
@@ -202,13 +193,14 @@ const QuizItem = () => {
           handleModalChangeName={handleModalChangeName}
           handlePlayAgain={handlePlayAgain}
           resetStopWatch={resetStopWatch}
+          statisticState={statisticState}
         />
       )}
 
       {open && name === 'Statistic' && (
         <StatisticScreenModal
           handleModalChangeName={handleModalChangeName}
-          createStatistic={createStatistic}
+          verifiedAnswers={verifiedAnswers}
         />
       )}
     </>

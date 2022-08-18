@@ -33,7 +33,7 @@ export type QuizQuestion = {
   _id?: string;
   question: string;
   answers: Array<string>;
-  correctAnswerIndex?: number;
+  correctAnswer?: string;
 };
 
 export type QuizPartial = {
@@ -42,6 +42,19 @@ export type QuizPartial = {
   description: string;
   cardImageUrl: string;
   id: string;
+};
+
+export type VerifiedAnswers = {
+  question: string;
+  correctAnswer: string;
+  selectedAnswer: string;
+};
+
+export type Statistic = {
+  totalQuestions: number;
+  correctAnswersCount: number;
+  spentTime: number;
+  verifiedAnswers: VerifiedAnswers[];
 };
 
 export type QuizzesState = {

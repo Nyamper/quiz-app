@@ -2,32 +2,21 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { quizItemFetch, quizItemCorrectAnswersFetch } from '../thunk/quizItem';
 
-import { Quiz, QuizQuestion } from '../../../types/types';
-
-type VerifiedAnswers = {
-  question: string;
-  chosenAnswer: string;
-  correctAnswer: string;
-};
+import { Quiz, QuizQuestion, Statistic } from '../../../types/types';
 
 type QuizState = {
   loading: boolean;
   error: boolean | null;
   start: boolean;
   questionCurrentIndex: number;
-  selectedAnswers: Array<number>;
+  selectedAnswers: Array<string>;
   data: Quiz;
   questionsState: {
     loading: boolean;
     error: boolean | null;
     questions: QuizQuestion[];
   };
-  statisticState: {
-    totalQuestions: number;
-    correctAnswersCount: number;
-    spentTime: number;
-    verifiedAnswers: VerifiedAnswers[];
-  };
+  statisticState: Statistic;
 };
 
 const initialState: QuizState = {

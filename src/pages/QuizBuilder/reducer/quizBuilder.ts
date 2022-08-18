@@ -11,7 +11,7 @@ const initialState: Quiz = {
     {
       question: '',
       answers: ['', '', '', ''],
-      correctAnswerIndex: 0,
+      correctAnswer: '',
     },
   ],
 };
@@ -30,7 +30,6 @@ const quizBuilderSlice = createSlice({
       state.questions.push(action.payload);
     },
   },
-  // extraReducers: (builder) => {},
 });
 
 export const { addQuestion: addQuestionAction } = quizBuilderSlice.actions;

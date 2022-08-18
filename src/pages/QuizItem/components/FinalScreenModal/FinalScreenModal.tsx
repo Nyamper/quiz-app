@@ -1,16 +1,16 @@
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Typography } from '@mui/material';
 import Modal from '../../../../components/Modal';
+import { Statistic } from '../../../../types/types';
+
+import { useAppSelector } from '../../../../hooks/hooks';
 
 type Props = {
-  handleRedirectToQuizzes?: () => void;
-  handleRedirectToLeaderBoard?: () => void;
+  handleRedirectToQuizzes: () => void;
+  handleRedirectToLeaderBoard: () => void;
   handlePlayAgain: () => void;
   handleModalChangeName: (name: string) => void;
   resetStopWatch: () => void;
-  // quizName: string;
-  // timeSpent: number;
-  // correctAnswers: number;
-  // totalQuestions: number;
+  statisticState: Statistic;
 };
 
 const FinalScreenModal = ({
@@ -19,7 +19,12 @@ const FinalScreenModal = ({
   handlePlayAgain,
   handleModalChangeName,
   resetStopWatch,
+  statisticState,
 }: Props) => {
+  const { loading, error } = useAppSelector(
+    (state) => state.quizItem.questionsState
+  );
+  const { totalQuestions, correctAnswersCount, spentTime } = statisticState;
   return (
     <>
       <Modal>
@@ -38,17 +43,21 @@ const FinalScreenModal = ({
               borderColor: 'secondary.main',
             }}
           >
-            <Box height="250px">
-              <Typography variant="h4" align="center">
-                Your score is:
-              </Typography>
-              <Typography variant="h4" align="center">
-                8/10
-              </Typography>
-              <Typography marginTop="20px" variant="h5" align="center">
-                You spent: 70 seconds
-              </Typography>
-            </Box>
+            {error && <div>something went wrong</div>}
+            {loading && !error && <CircularProgress size={24} />}
+            {!loading && !error && (
+              <Box height="250px">
+                <Typography variant="h4" align="center">
+                  Your score is:
+                </Typography>
+                <Typography variant="h4" align="center">
+                  {correctAnswersCount}/{totalQuestions}
+                </Typography>
+                <Typography marginTop="20px" variant="h5" align="center">
+                  You spent: {spentTime}
+                </Typography>
+              </Box>
+            )}
             <Box
               sx={{
                 p: 1,

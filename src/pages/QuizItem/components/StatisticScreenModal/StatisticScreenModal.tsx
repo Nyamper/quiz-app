@@ -1,14 +1,16 @@
 import { Box, Button, Typography } from '@mui/material';
 import Modal from '../../../../components/Modal';
 
+import { VerifiedAnswers } from '../../../../types/types';
+
 type Props = {
   handleModalChangeName: (name: string) => void;
-  createStatistic: () => void;
+  verifiedAnswers: VerifiedAnswers[];
 };
 
 const StatisticScreenModal = ({
   handleModalChangeName,
-  createStatistic,
+  verifiedAnswers,
 }: Props) => {
   return (
     <>
@@ -24,7 +26,7 @@ const StatisticScreenModal = ({
           <Box sx={{ p: 5, border: 1, borderColor: 'secondary.main' }}>
             <Box height="250px">
               <Typography variant="h4" align="center">
-                Statistics
+                Details
               </Typography>
             </Box>
             <Box>
@@ -33,9 +35,6 @@ const StatisticScreenModal = ({
                 onClick={() => handleModalChangeName('FinalScreen')}
               >
                 Go Back
-              </Button>
-              <Button onClick={() => createStatistic()}>
-                Create Statistic
               </Button>
             </Box>
           </Box>

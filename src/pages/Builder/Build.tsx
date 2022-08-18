@@ -16,7 +16,7 @@ const Build = () => {
     defaultValues: {
       question: '',
       answers: ['', '', '', ''],
-      correctAnswerIndex: 0,
+      correctAnswer: '',
     },
     mode: 'onBlur',
   });
