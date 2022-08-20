@@ -1,5 +1,5 @@
 export type Quiz = {
-  _id?: string;
+  id?: string;
   category: string;
   quizName: string;
   description: string;
@@ -30,7 +30,7 @@ export type LeaderBoardPartial = {
 };
 
 export type QuizQuestion = {
-  _id?: string;
+  id?: string;
   question: string;
   answers: Array<string>;
   correctAnswer?: string;
@@ -46,7 +46,7 @@ export type QuizPartial = {
 
 export type VerifiedAnswers = {
   question: string;
-  correctAnswer: string;
+  correctAnswer: string | undefined;
   selectedAnswer: string;
 };
 

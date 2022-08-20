@@ -1,6 +1,14 @@
 import { getQuiz, getQuizCorrectAnswers } from '../../../api/quizzes';
+import { RootState } from '../../../store/index';
+import { quizStatisticCreateAction } from '../reducer/quizItem';
+import { modalOpenToggleAction } from '../../../store/modal/reducer/modal';
 
 import { createAsyncThunk } from '@reduxjs/toolkit';
+
+type Payload = {
+  id: string;
+  spentTime: number;
+};
 
 const QUIZ_ITEM_FETCH_THUNK_TYPE = 'QUIZ_ITEM_FETCH_THUNK_TYPE';
 
@@ -27,6 +35,54 @@ export const quizItemCorrectAnswersFetch = createAsyncThunk(
     try {
       return await getQuizCorrectAnswers(_id);
     } catch (error: unknown) {
+      if (error instanceof Error) {
+        return rejectWithValue(error);
+      }
+      return Promise.reject(error);
+    }
+  }
+);
+
+const QUIZ_ITEM_STATISTIC_CREATE_START_TYPE =
+  'QUIZ_ITEM_STATISTIC_CREATE_START_TYPE';
+export const quizItemStatisticCreateStart = createAsyncThunk(
+  QUIZ_ITEM_STATISTIC_CREATE_START_TYPE,
+  async (payload: Payload, { dispatch, getState, rejectWithValue }) => {
+    try {
+      await dispatch(quizItemCorrectAnswersFetch(payload.id));
+      const state = getState() as RootState;
+      const { questions } = state.quizItem.data;
+
+      const makeStatistic = () => {
+        const totalQuestions = questions.length;
+        const selectedAnswers = state.quizItem.selectedAnswers;
+        let correctAnswersCount = 0;
+        const verifiedAnswers =
+          state.quizItem.correctAnswersState.questions.map(
+            (question, answer) => {
+              if (question.correctAnswer === selectedAnswers[answer]) {
+                correctAnswersCount++;
+              }
+
+              return {
+                question: question.question,
+                correctAnswer: question.correctAnswer,
+                selectedAnswer: selectedAnswers[answer],
+              };
+            }
+          );
+        return {
+          totalQuestions,
+          correctAnswersCount,
+          spentTime: payload.spentTime,
+          verifiedAnswers,
+        };
+      };
+
+      dispatch(quizStatisticCreateAction(makeStatistic()));
+      dispatch(modalOpenToggleAction({ name: 'FinalScreen' }));
+      await dispatch(quizItemFetch(payload.id));
+    } catch (error) {
       if (error instanceof Error) {
         return rejectWithValue(error);
       }

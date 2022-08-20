@@ -5,13 +5,13 @@ import { CardProps } from '../../../../types/types';
 import { Box, Container, Typography } from '@mui/material';
 
 const QuestionCard = (props: CardProps) => {
-  const { question, _id } = props.question;
+  const { question, id } = props.question;
 
   return (
     <>
       <Container maxWidth="md" fixed>
         <Box
-          key={_id}
+          key={id}
           sx={{ border: 1, p: '20px', borderColor: 'secondary.main' }}
         >
           <Box display="flex" width="auto" height={300}>

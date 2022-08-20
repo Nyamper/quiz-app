@@ -21,16 +21,15 @@ const Quiz = () => {
   return (
     <>
       <Container maxWidth={'xl'}>
-        {error && !quizzes && <h1>something went wrong</h1>}
         {loading && !error && <Spinner />}
-        <StyledCardContainer
-          container
-          spacing={{ xs: 2, md: 3 }}
-          columns={{ xs: 4, sm: 8, md: 12 }}
-        >
-          {!loading &&
-            !error &&
-            quizzes.map((quiz) => {
+        {error && <div>something went wrong</div>}
+        {!loading && !error && (
+          <StyledCardContainer
+            container
+            spacing={{ xs: 2, md: 3 }}
+            columns={{ xs: 4, sm: 8, md: 12 }}
+          >
+            {quizzes.map((quiz) => {
               return (
                 <StyledLink to={quiz.id} key={quiz.id}>
                   <StyledBox>
@@ -39,7 +38,8 @@ const Quiz = () => {
                 </StyledLink>
               );
             })}
-        </StyledCardContainer>
+          </StyledCardContainer>
+        )}
       </Container>
     </>
   );

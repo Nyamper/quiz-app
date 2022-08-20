@@ -10,7 +10,7 @@ import QuestionCard from './components/QuestionCard';
 import Spinner from '../../components/Spinner';
 import QuizDescription from './components/QuizDescription';
 
-import { quizItemFetch, quizItemCorrectAnswersFetch } from './thunk/quizItem';
+import { quizItemFetch, quizItemStatisticCreateStart } from './thunk/quizItem';
 import {
   modalOpenToggleAction,
   modalSetNameAction,
@@ -21,7 +21,6 @@ import {
   quizStartAction,
   quizStateResetAction,
   quizQuestionCurrentIndexAction,
-  createQuizStatisticAction,
 } from './reducer/quizItem';
 
 import FinalScreenModal from './components/FinalScreenModal';
@@ -40,12 +39,13 @@ const QuizItem = () => {
     selectedAnswers,
     questionCurrentIndex,
     data: quizItem,
-    questionsState,
+    correctAnswersState,
     statisticState,
   } = useAppSelector((state) => state.quizItem);
   const { open, name } = useAppSelector((state) => state.modal);
 
   const { category, quizName, description, questions } = quizItem;
+  const { loading: answersLoading, error: answersError } = correctAnswersState;
   const { verifiedAnswers } = statisticState;
 
   const {
@@ -100,19 +100,15 @@ const QuizItem = () => {
     dispatch(quizStateResetAction());
   };
 
-  const handleQuizEnd = () => {
-    pauseStopWatch();
-    handleModalOpen();
-    dispatch(quizItemCorrectAnswersFetch(params.quizid || ''));
-    console.log(selectedAnswers);
-  };
-
   const getAnswer = (selectedAnswer: string) => {
     dispatch(quizSelectedAnswersAction(selectedAnswer));
 
     if (questionCurrentIndex === questions.length - 1) {
-      createStatistic();
-      handleQuizEnd();
+      pauseStopWatch();
+      const id = params.quizid;
+      const spentTime: number = minutes ? minutes * 60 + seconds : seconds;
+      if (!id) return;
+      dispatch(quizItemStatisticCreateStart({ id, spentTime }));
     }
 
     if (questionCurrentIndex < questions.length - 1) {
@@ -120,34 +116,10 @@ const QuizItem = () => {
     }
   };
 
-  const createStatistic = () => {
-    const totalQuestions = questions.length;
-    let correctAnswersCount = 0;
-    const spentTime: number = minutes ? minutes * 60 + seconds : seconds;
-    const verifiedAnswers = questionsState.questions.map((question, answer) => {
-      if (question.correctAnswer === selectedAnswers[answer]) {
-        correctAnswersCount++;
-      }
-      return {
-        question: question.question,
-        correctAnswer: question.correctAnswer,
-        selectedAnswer: selectedAnswers[answer],
-      };
-    });
-
-    return dispatch(
-      createQuizStatisticAction({
-        totalQuestions,
-        correctAnswersCount,
-        spentTime,
-        verifiedAnswers,
-      })
-    );
-  };
-
   return (
     <>
-      <button onClick={() => console.log(selectedAnswers)}>logasdsdgs</button>
+      {loading && !error && <Spinner />}
+      {error && <div>something went wrong</div>}
       {!start && !error && !loading && (
         <QuizDescription
           handleQuizStart={handleQuizStart}
@@ -160,32 +132,30 @@ const QuizItem = () => {
       {start && (
         <Container maxWidth="lg" fixed>
           <Box sx={{ backgroundColor: '#f5f5f5', p: 5 }}>
-            {error && <div>something went wrong</div>}
-            {loading && !error && <Spinner />}
-            {!loading && !error && quizItem && (
-              <Box
-                sx={{
-                  p: 5,
-                  display: 'flex',
-                  border: 1,
-                  borderColor: 'secondary.main',
-                }}
-              >
-                <Stats
-                  seconds={seconds}
-                  minutes={minutes}
-                  questionCurrentIndex={questionCurrentIndex}
-                  totalQuestions={questions.length}
-                />
-                <QuestionCard
-                  question={questions[questionCurrentIndex]}
-                  getAnswer={getAnswer}
-                />
-              </Box>
-            )}
+            <Box
+              sx={{
+                p: 5,
+                display: 'flex',
+                border: 1,
+                borderColor: 'secondary.main',
+              }}
+            >
+              <Stats
+                seconds={seconds}
+                minutes={minutes}
+                questionCurrentIndex={questionCurrentIndex}
+                totalQuestions={questions.length}
+              />
+              <QuestionCard
+                question={questions[questionCurrentIndex]}
+                getAnswer={getAnswer}
+              />
+            </Box>
           </Box>
         </Container>
       )}
+
+      {answersError && <div>something went wrong</div>}
       {open && name === 'FinalScreen' && (
         <FinalScreenModal
           handleRedirectToQuizzes={handleRedirectToQuizzes}
@@ -196,7 +166,6 @@ const QuizItem = () => {
           statisticState={statisticState}
         />
       )}
-
       {open && name === 'Statistic' && (
         <StatisticScreenModal
           handleModalChangeName={handleModalChangeName}

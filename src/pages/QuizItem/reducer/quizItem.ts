@@ -2,49 +2,9 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { quizItemFetch, quizItemCorrectAnswersFetch } from '../thunk/quizItem';
 
-import { Quiz, QuizQuestion, Statistic } from '../../../types/types';
+import { initialState } from './initialState';
 
-type QuizState = {
-  loading: boolean;
-  error: boolean | null;
-  start: boolean;
-  questionCurrentIndex: number;
-  selectedAnswers: Array<string>;
-  data: Quiz;
-  questionsState: {
-    loading: boolean;
-    error: boolean | null;
-    questions: QuizQuestion[];
-  };
-  statisticState: Statistic;
-};
-
-const initialState: QuizState = {
-  loading: true,
-  error: null,
-  start: false,
-  questionCurrentIndex: 0,
-  selectedAnswers: [],
-  data: {
-    _id: '',
-    category: '',
-    quizName: '',
-    description: '',
-    cardImageUrl: 'string',
-    questions: [],
-  },
-  questionsState: {
-    loading: true,
-    error: null,
-    questions: [],
-  },
-  statisticState: {
-    totalQuestions: 0,
-    correctAnswersCount: 0,
-    spentTime: 0,
-    verifiedAnswers: [],
-  },
-};
+import * as actions from '../actions/quizItem';
 
 const QUIZ_ITEM_SLICE_NAME = 'QUIZ_ITEM_SLICE';
 
@@ -52,28 +12,13 @@ const quizItemSlice = createSlice({
   name: QUIZ_ITEM_SLICE_NAME,
   initialState,
   reducers: {
-    quizStart: (state) => {
-      state.start = true;
-    },
-
-    quizSelectedAnswers: (state, action) => {
-      state.selectedAnswers.push(action.payload);
-    },
-
-    quizQuestionCurrentIndex: (state) => {
-      state.questionCurrentIndex = state.questionCurrentIndex + 1;
-    },
-
-    quizStateReset: (state) => {
-      state.questionCurrentIndex = 0;
-      state.selectedAnswers = [];
-      state.start = false;
-    },
-
-    createQuizStatistic: (state, action) => {
-      state.statisticState = action.payload;
-    },
+    quizStart: actions.quizStart,
+    quizSelectedAnswers: actions.quizSelectedAnswers,
+    quizQuestionCurrentIndex: actions.quizQuestionCurrentIndex,
+    quizStateReset: actions.quizStateReset,
+    quizStatisticCreate: actions.quizStatisticCreate,
   },
+
   extraReducers: (builder) => {
     builder.addCase(quizItemFetch.pending, (state) => {
       state.loading = true;
@@ -89,25 +34,25 @@ const quizItemSlice = createSlice({
     });
 
     builder.addCase(quizItemCorrectAnswersFetch.pending, (state) => {
-      state.questionsState.loading = true;
-      state.questionsState.error = null;
+      state.correctAnswersState.loading = true;
+      state.correctAnswersState.error = null;
     });
     builder.addCase(quizItemCorrectAnswersFetch.fulfilled, (state, action) => {
-      state.questionsState.loading = false;
-      state.questionsState.questions = action.payload;
+      state.correctAnswersState.loading = false;
+      state.correctAnswersState.questions = action.payload;
     });
     builder.addCase(quizItemCorrectAnswersFetch.rejected, (state) => {
-      state.questionsState.loading = false;
-      state.questionsState.error = true;
+      state.correctAnswersState.loading = false;
+      state.correctAnswersState.error = true;
     });
   },
 });
 
 export const {
-  quizSelectedAnswers: quizSelectedAnswersAction,
   quizStart: quizStartAction,
   quizStateReset: quizStateResetAction,
-  createQuizStatistic: createQuizStatisticAction,
+  quizSelectedAnswers: quizSelectedAnswersAction,
+  quizStatisticCreate: quizStatisticCreateAction,
   quizQuestionCurrentIndex: quizQuestionCurrentIndexAction,
 } = quizItemSlice.actions;
 

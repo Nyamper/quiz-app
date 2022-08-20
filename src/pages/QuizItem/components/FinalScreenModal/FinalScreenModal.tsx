@@ -1,6 +1,7 @@
 import { Box, Button, CircularProgress, Typography } from '@mui/material';
 import Modal from '../../../../components/Modal';
 import { Statistic } from '../../../../types/types';
+import moment from 'moment';
 
 import { useAppSelector } from '../../../../hooks/hooks';
 
@@ -22,9 +23,10 @@ const FinalScreenModal = ({
   statisticState,
 }: Props) => {
   const { loading, error } = useAppSelector(
-    (state) => state.quizItem.questionsState
+    (state) => state.quizItem.correctAnswersState
   );
   const { totalQuestions, correctAnswersCount, spentTime } = statisticState;
+  const convertedTime = moment.utc(spentTime * 1000).format('HH:mm:ss');
   return (
     <>
       <Modal>
@@ -54,7 +56,7 @@ const FinalScreenModal = ({
                   {correctAnswersCount}/{totalQuestions}
                 </Typography>
                 <Typography marginTop="20px" variant="h5" align="center">
-                  You spent: {spentTime}
+                  Your time: {convertedTime}
                 </Typography>
               </Box>
             )}

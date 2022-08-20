@@ -3,7 +3,14 @@ import { Box } from '@mui/material';
 
 export const StyledBox = styled(Box)(
   sx({
-    display: 'flex',
-    justifyContent: 'center',
+    width: '100px',
+    height: '100px',
+    backgroundColor: 'none',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    margin: 'auto',
   })
 );

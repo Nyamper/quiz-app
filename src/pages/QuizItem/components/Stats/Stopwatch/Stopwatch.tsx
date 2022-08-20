@@ -19,7 +19,7 @@ const Stopwatch = ({ seconds, minutes }: Props) => {
             borderColor: 'secondary.main',
           }}
         >
-          <Typography variant="h4" align="center" sx={{ mt: 3 }}>
+          <Typography variant="h4" align="center" sx={{ mt: 2.5 }}>
             {minutes}:{seconds}
           </Typography>
         </Box>
