@@ -1,7 +1,12 @@
 import { getQuiz, getQuizCorrectAnswers } from '../../../api/quizzes';
-import { RootState } from '../../../store/index';
+import { leaderBoardPost } from '../../LeaderBoard/thunk/leaderBoard';
+
 import { quizStatisticCreateAction } from '../reducer/quizItem';
+
 import { modalOpenToggleAction } from '../../../store/modal/reducer/modal';
+import { RootState } from '../../../store/index';
+
+import { toast } from 'react-toastify';
 
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
@@ -19,6 +24,7 @@ export const quizItemFetch = createAsyncThunk(
       return await getQuiz(_id);
     } catch (error: unknown) {
       if (error instanceof Error) {
+        toast.error(error.message);
         return rejectWithValue(error);
       }
       return Promise.reject(error);
@@ -36,6 +42,7 @@ export const quizItemCorrectAnswersFetch = createAsyncThunk(
       return await getQuizCorrectAnswers(_id);
     } catch (error: unknown) {
       if (error instanceof Error) {
+        toast.error(error.message);
         return rejectWithValue(error);
       }
       return Promise.reject(error);
@@ -78,12 +85,22 @@ export const quizItemStatisticCreateStart = createAsyncThunk(
           verifiedAnswers,
         };
       };
-
-      dispatch(quizStatisticCreateAction(makeStatistic()));
+      const statistic = makeStatistic();
+      dispatch(quizStatisticCreateAction(statistic));
       dispatch(modalOpenToggleAction({ name: 'FinalScreen' }));
+      if (statistic.correctAnswersCount === statistic.totalQuestions) {
+        dispatch(
+          leaderBoardPost({
+            id: payload.id,
+            spentTime: statistic.spentTime,
+            username: localStorage.getItem('username'),
+          })
+        );
+      }
       await dispatch(quizItemFetch(payload.id));
     } catch (error) {
       if (error instanceof Error) {
+        toast.error(error.message);
         return rejectWithValue(error);
       }
       return Promise.reject(error);

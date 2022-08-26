@@ -5,8 +5,6 @@ export const StyledBox = styled(Box)(
   sx({
     border: 1,
     p: '20px',
-    // display: 'flex',
-    // alignItems: 'center',
-    // justifyContent: 'center',
+    borderColor: 'secondary.main',
   })
 );

@@ -1,15 +1,15 @@
+import PropTypes from 'prop-types';
+
 import { TableCell, TableRow, Typography } from '@mui/material';
 import { LeaderBoard } from '../../../../types/types';
 import moment from 'moment';
 
 type Props = {
-  _id?: string;
   username: string;
   category: string;
   quizName: string;
   time: number;
   createdAt?: Date;
-  updatedAt?: Date;
 };
 
 const LeaderTable = ({
@@ -42,6 +42,14 @@ const LeaderTable = ({
       </TableRow>
     </>
   );
+};
+
+LeaderTable.propTypes = {
+  username: PropTypes.string.isRequired,
+  category: PropTypes.string.isRequired,
+  quizName: PropTypes.string.isRequired,
+  time: PropTypes.number.isRequired,
+  createdAt: PropTypes.string.isRequired,
 };
 
 export default LeaderTable;

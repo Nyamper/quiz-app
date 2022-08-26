@@ -1,30 +1,33 @@
-import { useEffect } from 'react';
-import { useAppSelector, useAppDispatch } from '../../hooks/hooks';
+import { useEffect, useCallback } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useStopwatch } from 'react-timer-hook';
 
-import { Box, Container } from '@mui/material';
+import Spinner from '../../components/Spinner';
+import Error from '../../components/Error';
 
 import Stats from './components/Stats';
 import QuestionCard from './components/QuestionCard';
-import Spinner from '../../components/Spinner';
 import QuizDescription from './components/QuizDescription';
+import FinalScreenModal from './components/FinalScreenModal';
+import StatisticScreenModal from './components/StatisticScreenModal';
+
+import { StyledBox } from './styles';
+
+import { Box, Container } from '@mui/material';
+
+import { useAppSelector, useAppDispatch } from '../../hooks/hooks';
 
 import { quizItemFetch, quizItemStatisticCreateStart } from './thunk/quizItem';
 import {
   modalOpenToggleAction,
   modalSetNameAction,
 } from '../../store/modal/reducer/modal';
-
 import {
   quizSelectedAnswersAction,
   quizStartAction,
   quizStateResetAction,
   quizQuestionCurrentIndexAction,
 } from './reducer/quizItem';
-
-import FinalScreenModal from './components/FinalScreenModal';
-import StatisticScreenModal from './components/StatisticScreenModal';
 
 const QuizItem = () => {
   const navigate = useNavigate();
@@ -36,7 +39,6 @@ const QuizItem = () => {
     loading,
     error,
     start,
-    selectedAnswers,
     questionCurrentIndex,
     data: quizItem,
     correctAnswersState,
@@ -58,47 +60,50 @@ const QuizItem = () => {
 
   useEffect(() => {
     dispatch(quizItemFetch(params.quizid || ''));
-  }, [dispatch]);
+  }, [dispatch, params.quizid]);
 
   useEffect(() => {
     dispatch(quizStateResetAction());
-  }, [location]);
+  }, [dispatch, location]);
 
-  const handleModalOpen = () => {
+  const handleModalOpen = useCallback(() => {
     dispatch(modalOpenToggleAction({ name: 'FinalScreen' }));
-  };
+  }, [dispatch]);
 
-  const handleModalChangeName = (name: string) => {
-    dispatch(modalSetNameAction({ name: name }));
-  };
+  const handleModalChangeName = useCallback(
+    (name: string) => {
+      dispatch(modalSetNameAction({ name: name }));
+    },
+    [dispatch]
+  );
 
-  const handleRedirectToLeaderBoard = () => {
+  const handleRedirectToLeaderBoard = useCallback(() => {
     handleModalOpen();
     dispatch(quizStateResetAction());
     navigate('/leaderboard');
-  };
+  }, [handleModalOpen, dispatch, navigate]);
 
-  const handleRedirectToQuizzes = () => {
+  const handleRedirectToQuizzes = useCallback(() => {
     handleModalOpen();
     dispatch(quizStateResetAction());
     navigate('/quizzes');
-  };
+  }, [handleModalOpen, dispatch, navigate]);
 
-  const handlePlayAgain = () => {
+  const handlePlayAgain = useCallback(() => {
     handleModalOpen();
     dispatch(quizStateResetAction());
     navigate(`/quizzes/${params.quizid}`);
-  };
+  }, [handleModalOpen, dispatch, navigate, params.quizid]);
 
-  const handleQuizStart = () => {
+  const handleQuizStart = useCallback(() => {
     dispatch(quizStartAction());
     startStopWatch();
-  };
+  }, [dispatch, startStopWatch]);
 
-  const handleQuizCancel = () => {
+  const handleQuizCancel = useCallback(() => {
     navigate('/quizzes');
     dispatch(quizStateResetAction());
-  };
+  }, [dispatch, navigate]);
 
   const getAnswer = (selectedAnswer: string) => {
     dispatch(quizSelectedAnswersAction(selectedAnswer));
@@ -119,7 +124,7 @@ const QuizItem = () => {
   return (
     <>
       {loading && !error && <Spinner />}
-      {error && <div>something went wrong</div>}
+      {error && <Error />}
       {!start && !error && !loading && (
         <QuizDescription
           handleQuizStart={handleQuizStart}
@@ -131,15 +136,8 @@ const QuizItem = () => {
       )}
       {start && (
         <Container maxWidth="lg" fixed>
-          <Box sx={{ backgroundColor: '#f5f5f5', p: 5 }}>
-            <Box
-              sx={{
-                p: 5,
-                display: 'flex',
-                border: 1,
-                borderColor: 'secondary.main',
-              }}
-            >
+          <Box sx={{ p: 5 }}>
+            <StyledBox>
               <Stats
                 seconds={seconds}
                 minutes={minutes}
@@ -150,13 +148,14 @@ const QuizItem = () => {
                 question={questions[questionCurrentIndex]}
                 getAnswer={getAnswer}
               />
-            </Box>
+            </StyledBox>
           </Box>
         </Container>
       )}
 
-      {answersError && <div>something went wrong</div>}
-      {open && name === 'FinalScreen' && (
+      {answersError && <Error />}
+      {answersLoading && !answersError && <Spinner />}
+      {!answersLoading && open && name === 'FinalScreen' && (
         <FinalScreenModal
           handleRedirectToQuizzes={handleRedirectToQuizzes}
           handleRedirectToLeaderBoard={handleRedirectToLeaderBoard}

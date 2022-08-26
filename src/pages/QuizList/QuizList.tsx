@@ -1,9 +1,14 @@
 import { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { quizListFetch } from './thunk/quizList';
-import { Container } from '@mui/material';
+
 import Spinner from '../../components/Spinner';
 import QuizCard from './components/QuizCard';
+import Error from '../../components/Error';
+
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+
+import { quizListFetch } from './thunk/quizList';
+
+import { Container } from '@mui/material';
 import { StyledCardContainer, StyledBox, StyledLink } from './styles';
 
 const Quiz = () => {
@@ -22,7 +27,7 @@ const Quiz = () => {
     <>
       <Container maxWidth={'xl'}>
         {loading && !error && <Spinner />}
-        {error && <div>something went wrong</div>}
+        {error && <Error />}
         {!loading && !error && (
           <StyledCardContainer
             container

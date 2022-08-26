@@ -24,9 +24,9 @@ export type LeaderBoardState = {
 };
 
 export type LeaderBoardPartial = {
-  quizName: string;
-  time: number;
-  questionCount: number;
+  id: string;
+  spentTime: number;
+  username: string | null;
 };
 
 export type QuizQuestion = {
@@ -63,12 +63,20 @@ export type QuizzesState = {
   data: QuizPartial[];
 };
 
-export type CardProps = {
+export type AnswerProps = {
   question: QuizQuestion;
   getAnswer: Function;
 };
 
-export type AnswerProps = {
-  question: QuizQuestion;
-  getAnswer: Function;
+export type QuizBuilderProps = {
+  category: string;
+  quizName: string;
+  description: string;
+  cardImageUrl?: string;
+  question: string;
+  correctAnswer?: string;
+  answerValue: string;
+  answerValue2: string;
+  answerValue3: string;
+  answerValue4: string;
 };

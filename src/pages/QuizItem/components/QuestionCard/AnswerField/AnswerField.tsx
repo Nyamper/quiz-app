@@ -1,17 +1,6 @@
 import { AnswerProps } from '../../../../../types/types';
 import { StyledPaper, StyledBox } from './styles';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#00bcd4',
-    },
-    secondary: {
-      main: '#ff4081',
-    },
-  },
-});
+import { Typography } from '@mui/material';
 
 const AnswerField = (props: AnswerProps) => {
   const { getAnswer } = props;
@@ -19,22 +8,19 @@ const AnswerField = (props: AnswerProps) => {
 
   return (
     <>
-      <ThemeProvider theme={theme}>
-        <StyledBox>
-          {answers.map((answer, index) => {
-            return (
-              <StyledPaper
-                color="blue"
-                elevation={3}
-                key={index}
-                onClick={() => getAnswer(answer)}
-              >
-                {answer}
-              </StyledPaper>
-            );
-          })}
-        </StyledBox>
-      </ThemeProvider>
+      <StyledBox>
+        {answers.map((answer, index) => {
+          return (
+            <StyledPaper
+              elevation={3}
+              key={index}
+              onClick={() => getAnswer(answer)}
+            >
+              <Typography variant="h6">{answer}</Typography>
+            </StyledPaper>
+          );
+        })}
+      </StyledBox>
     </>
   );
 };

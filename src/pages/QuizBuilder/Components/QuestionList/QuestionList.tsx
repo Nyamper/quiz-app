@@ -5,15 +5,15 @@ import {
   List,
   ListItem,
   ListItemText,
+  Typography,
 } from '@mui/material';
 import { useState } from 'react';
 
-import { QuizQuestion } from '../../../../types/types';
+type QuestionListProps = {
+  handleSubmit: Function;
+};
 
-const QuestionList = () => {
-  // const QuestionList = (props: QuizQuestion[]) => {
-  // const { question } = props;
-
+const QuestionList = ({ handleSubmit }: QuestionListProps) => {
   const [questions, setQuestions] = useState([
     'Question 1',
     'Question 2',
@@ -34,7 +34,6 @@ const QuestionList = () => {
   ]);
   return (
     <>
-      {/* sx={{ bgcolor: '#eee', height: '80vh', overflow: 'auto' }} */}
       <Box>
         <Box>
           <List
@@ -46,14 +45,23 @@ const QuestionList = () => {
             {questions.map((question, index) => {
               return (
                 <ListItem button divider key={index}>
-                  <ListItemText primary={question} />
+                  <ListItemText>
+                    <Typography variant="body1" align="center">
+                      {question}
+                    </Typography>
+                  </ListItemText>
                 </ListItem>
               );
             })}
           </List>
         </Box>
         <Box sx={{ mt: 3 }}>
-          <Button variant="outlined" color="primary" fullWidth>
+          <Button
+            variant="outlined"
+            color="primary"
+            fullWidth
+            onClick={() => handleSubmit()}
+          >
             Add Question
           </Button>
         </Box>

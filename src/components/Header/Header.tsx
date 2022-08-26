@@ -1,59 +1,58 @@
-import {
-  StyledNavLink,
-  StyledLink,
-  StyledAppBar,
-  StyledYardIcon,
-  StyledLogo,
-} from './styles';
-import { MenuItem, Toolbar, Typography } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import { Toolbar, Tooltip, Typography } from '@mui/material';
 
-const Header = () => {
+import { StyledNavLink, StyledAppBar, StyledLogoutIcon } from './styles';
+
+type Props = {
+  handleLogout: () => void;
+};
+
+const Header = ({ handleLogout }: Props) => {
   return (
     <>
       <StyledAppBar
         position="sticky"
-        // sx={{ border: 1, borderColor: 'red' }}
         style={{
-          backgroundColor: 'white',
-          // backgroundColor: 'transparent',
+          backgroundColor: 'transparent',
           boxShadow: 'none',
         }}
       >
-        <Toolbar
-          sx={{
-            justifyContent: 'center',
-            // justifyContent: 'space-between',
-          }}
-        >
-          {/* <MenuItem>
+        <Toolbar sx={{ justifyContent: 'center' }}>
+          <StyledNavLink to={'/'}>
             <Typography textAlign="center" variant="h6">
-              <StyledNavLink to={'/builder2'}>BUILDER2</StyledNavLink>
+              HOME
             </Typography>
-          </MenuItem> */}
+          </StyledNavLink>
 
-          <MenuItem>
+          <StyledNavLink to={'/quizzes'}>
             <Typography textAlign="center" variant="h6">
-              <StyledNavLink to={'/'}>HOME</StyledNavLink>
+              Quizzes
             </Typography>
-          </MenuItem>
+          </StyledNavLink>
 
-          <MenuItem>
+          <StyledNavLink to={'/builder'}>
             <Typography textAlign="center" variant="h6">
-              <StyledNavLink to={'/quizzes'}>Quizzes</StyledNavLink>
+              Quiz Builder
             </Typography>
-          </MenuItem>
+          </StyledNavLink>
 
-          <MenuItem>
+          <StyledNavLink to={'/leaderboard'}>
             <Typography textAlign="center" variant="h6">
-              <StyledNavLink to={'/builder'}>Quiz Builder</StyledNavLink>
+              Leader board
             </Typography>
-          </MenuItem>
+          </StyledNavLink>
 
-          <MenuItem>
-            <Typography textAlign="center" variant="h6">
-              <StyledNavLink to={'/leaderboard'}>Leader board</StyledNavLink>
-            </Typography>
-          </MenuItem>
+          <Tooltip
+            title={
+              <Typography variant="body1" style={{ color: '#FFFF99' }}>
+                LogOut
+              </Typography>
+            }
+          >
+            <IconButton onClick={handleLogout}>
+              <StyledLogoutIcon />
+            </IconButton>
+          </Tooltip>
         </Toolbar>
       </StyledAppBar>
     </>

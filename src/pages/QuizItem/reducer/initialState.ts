@@ -15,7 +15,7 @@ export const initialState: QuizState = {
     questions: [],
   },
   correctAnswersState: {
-    loading: true,
+    loading: false,
     error: null,
     questions: [],
   },

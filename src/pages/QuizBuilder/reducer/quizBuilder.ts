@@ -1,20 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { Quiz } from '../../../types/types';
+import * as actions from '../actions/quizBuilder';
 
-const initialState: Quiz = {
-  category: '',
-  quizName: '',
-  description: '',
-  cardImageUrl: '',
-  questions: [
-    {
-      question: '',
-      answers: ['', '', '', ''],
-      correctAnswer: '',
-    },
-  ],
-};
+import { initialState } from '../initialState';
 
 const QUIZ_BUILDER_SLICE_NAME = 'QUIZ_BUILDER_SLICE';
 
@@ -22,16 +10,20 @@ const quizBuilderSlice = createSlice({
   name: QUIZ_BUILDER_SLICE_NAME,
   initialState,
   reducers: {
-    setQuiz: (state, action) => {
-      state = action.payload;
-    },
-
-    addQuestion: (state, action) => {
-      state.questions.push(action.payload);
-    },
+    quizCreateInProgress: actions.quizCreateInProgress,
+    quizCreateSuccess: actions.quizCreateSuccess,
+    quizCreateError: actions.quizCreateError,
+    quizBuildComplete: actions.quizBuildComplete,
+    quizAddQuestion: actions.quizAddQuestion,
   },
 });
 
-export const { addQuestion: addQuestionAction } = quizBuilderSlice.actions;
+export const {
+  quizAddQuestion: quizAddQuestionAction,
+  quizBuildComplete: quizBuildCompleteAction,
+  quizCreateInProgress: quizCreateInProgressAction,
+  quizCreateSuccess: quizCreateSuccessAction,
+  quizCreateError: quizCreateErrorAction,
+} = quizBuilderSlice.actions;
 
 export default quizBuilderSlice.reducer;

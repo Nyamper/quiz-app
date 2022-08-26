@@ -4,19 +4,15 @@ import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import { QuizPartial } from '../../../../types/types';
 import { StyledCard } from './styles';
+import jspic from '../../../../assets/jspic.png';
 
 const ActionAreaCard = (props: QuizPartial) => {
-  const { category, quiz, id, description } = props;
+  const { category, quiz } = props;
 
   return (
     <StyledCard>
       <CardActionArea>
-        <CardMedia
-          component="img"
-          height="140"
-          image="https://uaspectr.com/wp-content/uploads/2022/05/jsjsjs.png"
-          alt={category}
-        />
+        <CardMedia component="img" height="140" alt={category} image={jspic} />
         <CardContent>
           <Typography gutterBottom variant="h6" component="div">
             {quiz}

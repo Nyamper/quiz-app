@@ -1,11 +1,13 @@
 import { Routes, Route } from 'react-router-dom';
-import Layout from './components/Layout';
-import LeaderBoard from './pages/LeaderBoard';
+
 import Home from './pages/Home';
 import QuizList from './pages/QuizList';
 import QuizItem from './pages/QuizItem';
+import LeaderBoard from './pages/LeaderBoard';
 import QuizBuilder from './pages/QuizBuilder';
-import Builder from './pages/Builder';
+
+import Layout from './components/Layout';
+import ErrorPage from './components/404/404';
 
 const App = () => {
   return (
@@ -17,10 +19,9 @@ const App = () => {
             <Route index element={<QuizList />} />
             <Route path=":quizid" element={<QuizItem />} />
           </Route>
-          <Route path="builder2" element={<Builder />} />
           <Route path="builder" element={<QuizBuilder />} />
           <Route path="leaderboard" element={<LeaderBoard />} />
-          <Route path="*" element={<div>page not found 404</div>} />
+          <Route path="*" element={<ErrorPage />} />
         </Route>
       </Routes>
     </>

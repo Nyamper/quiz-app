@@ -2,11 +2,11 @@ import { Box, Divider } from '@mui/material';
 import { FormInputText } from '../FormInputText/FormInputText';
 import { FormInputRadio } from '../FormInputRadio/FormInputRadio';
 
-import { Quiz } from '../../../../types/types';
+import { QuizBuilderProps } from '../../../../types/types';
 
 import { Control } from 'react-hook-form';
 
-const QuizQuestions = ({ control }: { control: Control<Quiz> }) => {
+const QuizQuestions = ({ control }: { control: Control<QuizBuilderProps> }) => {
   return (
     <>
       <Box
@@ -24,7 +24,7 @@ const QuizQuestions = ({ control }: { control: Control<Quiz> }) => {
         <Box display="flex" justifyContent="center" alignItems="center">
           <Box>
             <FormInputRadio
-              name={'correctAnswerIndex'}
+              name={'correctAnswer'}
               label={'Radio Input'}
               control={control}
             />

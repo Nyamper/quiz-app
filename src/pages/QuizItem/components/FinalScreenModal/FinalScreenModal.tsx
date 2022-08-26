@@ -1,18 +1,20 @@
-import { Box, Button, CircularProgress, Typography } from '@mui/material';
-import Modal from '../../../../components/Modal';
-import { Statistic } from '../../../../types/types';
+import PropTypes from 'prop-types';
 import moment from 'moment';
+
+import { FinalScreentProps } from './types';
 
 import { useAppSelector } from '../../../../hooks/hooks';
 
-type Props = {
-  handleRedirectToQuizzes: () => void;
-  handleRedirectToLeaderBoard: () => void;
-  handlePlayAgain: () => void;
-  handleModalChangeName: (name: string) => void;
-  resetStopWatch: () => void;
-  statisticState: Statistic;
-};
+import Modal from '../../../../components/Modal';
+import Error from '../../../../components/Error';
+
+import { Box, CircularProgress, Typography } from '@mui/material';
+import {
+  StyledBoxContainer,
+  StyledButtonBox,
+  StyledButton,
+  StyledContentBox,
+} from './styles';
 
 const FinalScreenModal = ({
   handleRedirectToQuizzes,
@@ -21,7 +23,7 @@ const FinalScreenModal = ({
   handleModalChangeName,
   resetStopWatch,
   statisticState,
-}: Props) => {
+}: FinalScreentProps) => {
   const { loading, error } = useAppSelector(
     (state) => state.quizItem.correctAnswersState
   );
@@ -30,22 +32,9 @@ const FinalScreenModal = ({
   return (
     <>
       <Modal>
-        <Box
-          sx={{
-            p: 5,
-            minWidth: 350,
-            minHeight: 200,
-            backgroundColor: '#f5f5f5',
-          }}
-        >
-          <Box
-            sx={{
-              p: 5,
-              border: 1,
-              borderColor: 'secondary.main',
-            }}
-          >
-            {error && <div>something went wrong</div>}
+        <StyledBoxContainer>
+          <StyledContentBox>
+            {error && <Error />}
             {loading && !error && <CircularProgress size={24} />}
             {!loading && !error && (
               <Box height="250px">
@@ -60,17 +49,9 @@ const FinalScreenModal = ({
                 </Typography>
               </Box>
             )}
-            <Box
-              sx={{
-                p: 1,
-                my: 5,
-                display: 'flex',
-                justifyContent: 'center',
-                flexDirection: 'column',
-              }}
-            >
-              <Button
-                sx={{ my: 1, height: '50px' }}
+
+            <StyledButtonBox>
+              <StyledButton
                 variant="outlined"
                 onClick={() => {
                   resetStopWatch();
@@ -78,37 +59,47 @@ const FinalScreenModal = ({
                 }}
               >
                 Play Again
-              </Button>
+              </StyledButton>
 
-              <Button
-                sx={{ my: 1, height: '50px' }}
+              <StyledButton
                 variant="outlined"
                 onClick={handleRedirectToQuizzes}
               >
                 See all quizzes
-              </Button>
+              </StyledButton>
 
-              <Button
-                sx={{ my: 1, height: '50px' }}
+              <StyledButton
                 variant="outlined"
                 onClick={() => handleModalChangeName('Statistic')}
               >
                 Details
-              </Button>
+              </StyledButton>
 
-              <Button
-                sx={{ my: 1, height: '50px' }}
+              <StyledButton
                 variant="outlined"
                 onClick={handleRedirectToLeaderBoard}
               >
                 Leaderboard
-              </Button>
-            </Box>
-          </Box>
-        </Box>
+              </StyledButton>
+            </StyledButtonBox>
+          </StyledContentBox>
+        </StyledBoxContainer>
       </Modal>
     </>
   );
+};
+
+FinalScreenModal.propTypes = {
+  handleRedirectToQuizzes: PropTypes.func.isRequired,
+  handleRedirectToLeaderBoard: PropTypes.func.isRequired,
+  handlePlayAgain: PropTypes.func.isRequired,
+  handleModalChangeName: PropTypes.func.isRequired,
+  resetStopWatch: PropTypes.func.isRequired,
+  statisticState: PropTypes.shape({
+    totalQuestions: PropTypes.number.isRequired,
+    correctAnswersCount: PropTypes.number.isRequired,
+    spentTime: PropTypes.number.isRequired,
+  }).isRequired,
 };
 
 export default FinalScreenModal;

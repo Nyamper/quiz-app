@@ -1,6 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+
+import { ThemeProvider as MuiThemeProvider } from '@mui/material';
+import { ThemeProvider } from 'styled-components';
+import { theme } from './styles/theme';
+import 'react-toastify/dist/ReactToastify.css';
 import './index.css';
+
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
@@ -15,7 +21,11 @@ const root = ReactDOM.createRoot(
 root.render(
   <Provider store={store}>
     <BrowserRouter>
-      <App />
+      <MuiThemeProvider theme={theme}>
+        <ThemeProvider theme={theme}>
+          <App />
+        </ThemeProvider>
+      </MuiThemeProvider>
     </BrowserRouter>
   </Provider>
 );

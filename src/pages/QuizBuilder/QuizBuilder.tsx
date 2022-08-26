@@ -2,21 +2,25 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { Box, Button, Container, Typography } from '@mui/material';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { addQuestionAction } from './reducer/quizBuilder';
+import {
+  quizAddQuestionAction,
+  quizBuildCompleteAction,
+} from './reducer/quizBuilder';
+import { quizItemCreate } from './thunk/quizBuilder';
 
 import QuizHeader from './Components/QuizHeader';
 import QuizQuestions from './Components/QuestionForm';
 import QuestionList from './Components/QuestionList';
 
-import { QuizQuestion, Quiz } from '../../types/types';
-
-interface IFormInput {
-  answerValue: string;
-}
+import { QuizBuilderProps } from '../../types/types';
 
 const defaultValues = {
+  category: '',
+  quizName: '',
+  description: '',
+  cardImageUrl: '',
+  correctAnswer: '0',
   question: '',
-  correctAnswerIndex: '0',
   answerValue: '',
   answerValue2: '',
   answerValue3: '',
@@ -25,60 +29,58 @@ const defaultValues = {
 
 const QuizBuilder = () => {
   const dispatch = useAppDispatch();
-  const quizBuilder = useAppSelector((state) => state.quizBuilder);
-  const methods = useForm<Quiz>({ defaultValues: quizBuilder });
-  // console.log(quizBuilder);
-  // const methods = useForm<Quiz[]>({ defaultValues: defaultValues });
-  // const methods = useForm<IFormInput>({ defaultValues: defaultValues });
-  const { handleSubmit, reset, control, setValue, watch } = methods;
+  const quizBuilder = useAppSelector((state) => state.quizBuilder.data);
 
-  const onSubmit = (data: Quiz) => {
-    // const onSubmit = (data: any) => {
-    dispatch(addQuestionAction(data));
-    console.log(data);
-    // console.log(questions);
+  const methods = useForm<QuizBuilderProps>({
+    defaultValues: defaultValues,
+  });
+
+  const { handleSubmit, reset, control, setValue, watch, resetField } = methods;
+
+  const onSubmit = (data: QuizBuilderProps) => {};
+
+  const handleCreateQuiz = () => {
+    dispatch(quizItemCreate(quizBuilder));
+  };
+
+  const handleResetAnswers = () => {
+    resetField('question');
+    resetField('answerValue');
+    resetField('answerValue2');
+    resetField('answerValue3');
+    resetField('answerValue4');
+    resetField('correctAnswer');
   };
 
   return (
     <>
-      <Container
-        maxWidth="lg"
-        sx={{ backgroundColor: '#f5f5f5', my: 5, py: 3 }}
-      >
+      <Container maxWidth="lg">
         <FormProvider {...methods}>
-          <Typography variant="h3" align="center">
-            QuizBuilder
-          </Typography>
           <Box
             display="flex"
             justifyContent="center"
             sx={{
               p: 5,
-              border: '1px solid',
-              borderColor: 'secondary.main',
               alignContent: 'true',
             }}
           >
+            <Box width="80%">
+              <QuizHeader control={control} />
+              <QuizQuestions control={control} />
+            </Box>
             <Box
-              width="20%"
+              width="15%"
               sx={{
-                mr: 5,
+                ml: 5,
                 p: 5,
                 border: '1px solid',
                 borderColor: 'secondary.main',
               }}
             >
-              {/* here */}
-              <QuestionList />
-              {/* <QuestionList control={control} {...questions} /> */}
+              <QuestionList handleSubmit={handleSubmit(onSubmit)} />
             </Box>
-            <Box width="80%">
-              <QuizHeader control={control} />
-              {/* here  */}
-              <QuizQuestions control={control} />
-            </Box>
-            <Button onClick={handleSubmit(onSubmit)}>Submit</Button>
           </Box>
+          {/* <Button onClick={() => handleCreateQuiz()}>Submit</Button> */}
         </FormProvider>
       </Container>
     </>

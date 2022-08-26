@@ -1,8 +1,12 @@
+import PropTypes from 'prop-types';
+
 import AnswerField from './AnswerField';
 
-import { CardProps } from '../../../../types/types';
+import { CardProps } from './types';
 
 import { Box, Container, Typography } from '@mui/material';
+
+import { StyledBox } from './styles';
 
 const QuestionCard = (props: CardProps) => {
   const { question, id } = props.question;
@@ -10,10 +14,7 @@ const QuestionCard = (props: CardProps) => {
   return (
     <>
       <Container maxWidth="md" fixed>
-        <Box
-          key={id}
-          sx={{ border: 1, p: '20px', borderColor: 'secondary.main' }}
-        >
+        <StyledBox key={id}>
           <Box display="flex" width="auto" height={300}>
             <Box m="auto">
               <Typography variant={'h5'} align={'center'}>
@@ -27,10 +28,15 @@ const QuestionCard = (props: CardProps) => {
               getAnswer={props.getAnswer}
             />
           </Box>
-        </Box>
+        </StyledBox>
       </Container>
     </>
   );
+};
+
+QuestionCard.propTypes = {
+  question: PropTypes.object,
+  getAnswer: PropTypes.func,
 };
 
 export default QuestionCard;

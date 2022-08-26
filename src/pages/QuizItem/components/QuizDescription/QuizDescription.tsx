@@ -1,33 +1,22 @@
+import PropTypes from 'prop-types';
+
+import { DescriptionProps } from './types';
+
 import { Box, Button, Container, Divider, Typography } from '@mui/material';
 
-type Props = {
-  handleQuizStart: () => void;
-  handleQuizCancel: () => void;
-  quizName: string;
-  category: string;
-  description: string;
-};
+import { StyledBox } from './styles';
 
 const QuizDescription = ({
   handleQuizStart,
   handleQuizCancel,
   quizName,
-  category,
   description,
-}: Props) => {
+}: DescriptionProps) => {
   return (
     <>
       <Container maxWidth="lg">
-        <Box sx={{ backgroundColor: '#f5f5f5', p: 5 }} maxHeight="600">
-          <Box
-            sx={{
-              p: 5,
-              display: 'flex',
-              border: 1,
-              borderColor: 'secondary.main',
-              height: 455,
-            }}
-          >
+        <Box sx={{ p: 5 }} maxHeight="600">
+          <StyledBox>
             <Box m="auto">
               <Typography variant="h3" component="h1" align="center">
                 {quizName}
@@ -40,11 +29,12 @@ const QuizDescription = ({
               <Divider sx={{ my: 2 }} />
               <Typography align="center">
                 You have unlimited time to answer each question. But the faster
-                you answer, the higher your score. When you are done, try again
-                to beat your best score!
+                you answer, the higher your score. If you answer all the
+                questions correctly, you can take a place on the leader board
+                When you are done, try again to beat your best score!
               </Typography>
             </Box>
-          </Box>
+          </StyledBox>
           <Box
             sx={{ mt: 1, pt: 5 }}
             display="flex"
@@ -71,6 +61,13 @@ const QuizDescription = ({
       </Container>
     </>
   );
+};
+
+QuizDescription.propTypes = {
+  handleQuizStart: PropTypes.func,
+  handleQuizCancel: PropTypes.func,
+  quizName: PropTypes.string,
+  description: PropTypes.string,
 };
 
 export default QuizDescription;

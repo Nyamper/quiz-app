@@ -13,11 +13,12 @@ export const StyledBox = styled(Box)(
 
 export const StyledPaper = styled(Paper)(
   sx({
-    verticalAlign: 'center',
+    display: 'flex',
     textAlign: 'center',
+    flexDirection: 'column',
+    justifyContent: 'center',
     lineHeight: '90px',
     minHeight: '90px',
-    fontSize: '20px',
 
     ':hover': {
       transform: 'scale(1.008)',
