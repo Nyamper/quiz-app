@@ -58,7 +58,7 @@ const FinalScreenModal = ({
                   handlePlayAgain();
                 }}
               >
-                Play Again
+                Try Again
               </StyledButton>
 
               <StyledButton

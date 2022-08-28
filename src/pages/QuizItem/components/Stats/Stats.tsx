@@ -9,6 +9,8 @@ const Stats = ({
   totalQuestions,
   seconds,
   minutes,
+  hours,
+  tip,
 }: StatsProps) => {
   return (
     <>
@@ -27,7 +29,15 @@ const Stats = ({
           height={50}
           sx={{ display: 'flex', mt: 8 }}
         >
-          <Stopwatch seconds={seconds} minutes={minutes} />
+          <Stopwatch seconds={seconds} minutes={minutes} hours={hours} />
+        </Box>
+        <Box sx={{ mt: 15 }}>
+          <Typography variant={'h5'} align={'center'}>
+            TIPS:
+          </Typography>
+          <Typography variant="h6" align="center">
+            {tip}
+          </Typography>
         </Box>
       </StyledContainer>
     </>
@@ -39,6 +49,7 @@ Stats.propTypes = {
   totalQuestions: PropTypes.number,
   seconds: PropTypes.number,
   minutes: PropTypes.number,
+  hours: PropTypes.number,
 };
 
 export default Stats;

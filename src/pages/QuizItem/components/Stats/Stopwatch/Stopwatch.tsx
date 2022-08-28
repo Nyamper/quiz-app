@@ -1,17 +1,21 @@
 import { Box, Typography } from '@mui/material';
-import { StyledTimerContainer } from './styles';
+import { StyledTimerContainer, StyledContainer } from './styles';
 import { StopWatchProps } from './types';
 
-const Stopwatch = ({ seconds, minutes }: StopWatchProps) => {
+const Stopwatch = ({ seconds, minutes, hours }: StopWatchProps) => {
   return (
     <>
-      <Box m="auto" sx={{ justifyContent: 'center' }}>
-        <StyledTimerContainer>
-          <Typography variant="h4" align="center" sx={{ mt: 2.5 }}>
-            {minutes}:{seconds}
-          </Typography>
-        </StyledTimerContainer>
-      </Box>
+      <StyledContainer m="auto">
+        <Box>
+          <StyledTimerContainer>
+            <Typography variant="h4" align="center">
+              {hours < 10 ? `0${hours}` : hours}
+              {minutes < 10 ? `:0${minutes}` : `:${minutes}`}
+              {seconds < 10 ? `:0${seconds}` : `:${seconds}`}
+            </Typography>
+          </StyledTimerContainer>
+        </Box>
+      </StyledContainer>
     </>
   );
 };

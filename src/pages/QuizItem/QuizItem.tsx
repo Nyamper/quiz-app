@@ -1,6 +1,9 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useStopwatch } from 'react-timer-hook';
+
+import { calcTime } from './utils';
+import { tips } from './constants';
 
 import Spinner from '../../components/Spinner';
 import Error from '../../components/Error';
@@ -12,7 +15,6 @@ import FinalScreenModal from './components/FinalScreenModal';
 import StatisticScreenModal from './components/StatisticScreenModal';
 
 import { StyledBox } from './styles';
-
 import { Box, Container } from '@mui/material';
 
 import { useAppSelector, useAppDispatch } from '../../hooks/hooks';
@@ -34,6 +36,7 @@ const QuizItem = () => {
   const params = useParams();
   const location = useLocation();
   const dispatch = useAppDispatch();
+  const [tip, setTip] = useState(tips[0]);
 
   const {
     loading,
@@ -53,6 +56,7 @@ const QuizItem = () => {
   const {
     seconds,
     minutes,
+    hours,
     start: startStopWatch,
     pause: pauseStopWatch,
     reset: resetStopWatch,
@@ -65,6 +69,10 @@ const QuizItem = () => {
   useEffect(() => {
     dispatch(quizStateResetAction());
   }, [dispatch, location]);
+
+  useEffect(() => {
+    seconds % 8 === 0 && generateTips();
+  }, [seconds]);
 
   const handleModalOpen = useCallback(() => {
     dispatch(modalOpenToggleAction({ name: 'FinalScreen' }));
@@ -105,13 +113,19 @@ const QuizItem = () => {
     dispatch(quizStateResetAction());
   }, [dispatch, navigate]);
 
+  const generateTips = () => {
+    const randomIndex = Math.floor(Math.random() * tips.length);
+    return setTip(tips[randomIndex]);
+  };
+
   const getAnswer = (selectedAnswer: string) => {
     dispatch(quizSelectedAnswersAction(selectedAnswer));
 
     if (questionCurrentIndex === questions.length - 1) {
       pauseStopWatch();
       const id = params.quizid;
-      const spentTime: number = minutes ? minutes * 60 + seconds : seconds;
+      const spentTime: number = calcTime(hours, minutes, seconds);
+
       if (!id) return;
       dispatch(quizItemStatisticCreateStart({ id, spentTime }));
     }
@@ -141,6 +155,8 @@ const QuizItem = () => {
               <Stats
                 seconds={seconds}
                 minutes={minutes}
+                hours={hours}
+                tip={tip}
                 questionCurrentIndex={questionCurrentIndex}
                 totalQuestions={questions.length}
               />

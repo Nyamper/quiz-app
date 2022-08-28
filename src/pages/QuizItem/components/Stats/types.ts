@@ -3,4 +3,6 @@ export type StatsProps = {
   totalQuestions: number;
   seconds: number;
   minutes: number;
+  hours: number;
+  tip: string;
 };
